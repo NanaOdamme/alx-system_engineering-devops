@@ -1,2 +1,2 @@
 #!/bin/bash
-text="Hello, World!"; encoded_text=$(echo "$text" | tr 'A-Za-z' 'N-ZA-Mn-za-m'); decoded_text=$(echo "$encoded_text" | tr 'A-Za-z' 'N-ZA-Mn-za-m')
+tr A-Za-z N-Za-Mn-Za-m
