@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Using an until loop to display "Best School" 10 times
+# Counter variable
+count=0
+until [ $count -ge 10 ]; do
+    echo "Best School"
+    ((count++))
+done

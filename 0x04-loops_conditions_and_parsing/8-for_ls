@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Using a for loop to display content in list format
+for file in *; do
+    # Check if the file is not a hidden file and is a regular file
+    if [[ ! "$file" =~ ^\..* && -f "$file" ]]; then
+        # Extract the part of the name after the first dash
+        name_part=$(echo "$file" | cut -d'-' -f2-)
+        echo "- $name_part"
+    fi
+done
