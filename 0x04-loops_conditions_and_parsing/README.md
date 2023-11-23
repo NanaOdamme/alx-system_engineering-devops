@@ -4,7 +4,7 @@
 ## Generating SSH Keys
 To create SSH keys, use the following command, replacing `my_ssh_key` with your desired key name:
 ```bash
-ssh-keygen -t rsa -b 2048 -f ~/.ssh/my_ssh_key
+ssh-keygen -t rsa
 ```
 
 ## Shebang: `#!/usr/bin/env bash` vs `#!/bin/bash`
