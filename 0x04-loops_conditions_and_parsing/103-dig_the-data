@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
+# parses an Apache log file and displays the IP and HTTP code for each visitor, along with the number of occurences.
 
-# Using awk to group visitors by IP and HTTP status code and count occurrences
-awk '{ip_code[$1, $9]++} END {for (key in ip_code) print ip_code[key], key}' apache-access.log | sort -nr
+awk '{print $1,$9}' apache-access.log | sort | uniq -c | sort -nr
