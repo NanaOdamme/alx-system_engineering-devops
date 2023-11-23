@@ -5,6 +5,6 @@ for file in *; do
     if [[ ! "$file" =~ ^\..* && -f "$file" ]]; then
         # Extract the part of the name after the first dash
         name_part=$(echo "$file" | cut -d'-' -f2-)
-        echo "- $name_part"
+        echo "$name_part"
     fi
 done
