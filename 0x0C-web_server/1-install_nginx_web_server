@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Configures a new ubuntu machine by installing
+# Nginx where it should be listening on port 80
+# Serve a page that would return a Hello World string
+#
+# colors
+blue='\e[1;34m'
+brown='\e[0;33m'
+green='\e[1;32m'
+reset='\033[0m'
+
+# Print a message about updating and installing Nginx
+echo -e "${blue}Updating and installing ${brown}Nginx${blue}.${reset}\n"
+
+# Update package information and install Nginx
+sudo apt-get update -y -qq && \
+    sudo apt-get install nginx -y
+
+# Print a message about setting up minor stuff
+echo -e "\n${blue}Setting up some minor stuff.${reset}\n"
+
+# Start Nginx service
+sudo service nginx start
+
+# Allow Nginx through the firewall
+sudo ufw allow 'Nginx HTTP'
+
+# Give the user ownership of website files for easy editing
+sudo chown -R "$USER":"$USER" /var/www/html
+sudo chmod -R 755 /var/www
+
+# Backup default index
+cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
+
+# Create a new index with "Hello World!" content
+echo -e "Hello World!" | dd status=none of=/var/www/html/index.nginx-debian.html
+
+# Restart Nginx
+sudo service nginx restart
+
+# Print a completion message
+echo -e "\n${green}Completed.${reset} ✅\n"
