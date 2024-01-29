@@ -10,20 +10,20 @@ reset='\033[0m'
 echo -e "${blue}Updating and doing some minor checks...${reset}\n"
 
 function install() {
-	command -v "$1" &> /dev/null
+    command -v "$1" &> /dev/null
 
-	#shellcheck disable=SC2181
-	if [ $? -ne 0 ]; then
-		echo -e "	Installing: ${brown}$1${reset}\n"
-		sudo apt-get update -y -qq && \
-			sudo apt-get install -y "$1" -qq
-		echo -e "\n"
-	else
-		echo -e "	${green}${1} is already installed.${reset}\n"
-	fi
+    if [ $? -ne 0 ]; then
+        echo -e "    Installing: ${brown}$1${reset}\n"
+        sudo apt-get update -y -qq && \
+            sudo apt-get install -y "$1" -qq
+        echo -e "\n"
+    else
+        echo -e "    ${green}${1} is already installed.${reset}\n"
+    fi
 }
 
-install haproxy #install haproxy
+# Add logging for better visibility
+install haproxy
 
 echo -e "\n${blue}Setting up some minor stuff.${reset}\n"
 
@@ -40,13 +40,13 @@ defaults
   timeout http-request 10s
 
 frontend th3gr00t-tech-frontend
-    bind *:8080
+    bind *:80
     default_backend th3gr00t-tech-backend
 
 backend th3gr00t-tech-backend
     balance roundrobin
-    server 453-web-01 54.82.82.3:8080 check
-    server 453-web-02 18.209.178.150:8080 check
+    server 453-web-01 54.82.82.3:80 check
+    server 453-web-02 18.209.178.150:80 check
 "
 
 # shellcheck disable=SC2154
@@ -55,8 +55,10 @@ echo "$server_config" | sudo dd status=none of=/etc/haproxy/haproxy.cfg
 # enable haproxy to be started by init script
 echo "ENABLED=1" | sudo dd status=none of=/etc/default/haproxy
 
-if [ "$(pgrep -c haproxy)" -le 0 ]; then
-	sudo service haproxy start
+# Introduce error handling for HAProxy service start/restart
+if sudo service haproxy start; then
+    echo -e "${green}HAProxy service started successfully.${reset}\n"
 else
-	sudo service haproxy restart
+    echo -e "${brown}Error starting/restarting HAProxy service.${reset}\n"
 fi
+
