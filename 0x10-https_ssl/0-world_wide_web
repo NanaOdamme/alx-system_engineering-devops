@@ -12,7 +12,7 @@ brown='\e[0;33m'
 reset='\033[0m'
 
 # variables & parameters
-subdomains=( "www" "lb-01" "web-01" "web-02" )
+subdomains=( "www" "54.89.194.188" "54.82.82.3" "18.209.178.150" )
 domain="$1"
 sub="$2"
 
