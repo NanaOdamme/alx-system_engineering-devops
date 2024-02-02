@@ -1,64 +1,55 @@
 #!/usr/bin/env bash
 # install load balancer
 
-# colors
-blue='\e[1;34m'
-brown='\e[0;33m'
-green='\e[1;32m'
-reset='\033[0m'
+# Update the package list
+sudo apt-get update
 
-echo -e "${blue}Updating and doing some minor checks...${reset}\n"
+# Install HAProxy
+sudo apt-get install -y haproxy
 
-function install() {
-    command -v "$1" &> /dev/null
+# Configure HAProxy
+sudo tee /etc/haproxy/haproxy.cfg > /dev/null <<EOF
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin
+    stats timeout 30s
+    user haproxy
+    group haproxy
+    daemon
 
-    if [ $? -ne 0 ]; then
-        echo -e "    Installing: ${brown}$1${reset}\n"
-        sudo apt-get update -y -qq && \
-            sudo apt-get install -y "$1" -qq
-        echo -e "\n"
-    else
-        echo -e "    ${green}${1} is already installed.${reset}\n"
-    fi
-}
-
-# Add logging for better visibility
-install haproxy
-
-echo -e "\n${blue}Setting up some minor stuff.${reset}\n"
-
-# backup default server config file
-sudo cp /etc/haproxy/haproxy.cfg haproxy_default.backup
-
-server_config=\
-"
 defaults
-  mode http
-  timeout client 15s
-  timeout connect 10s
-  timeout server 15s
-  timeout http-request 10s
+    log global
+    mode http
+    option httplog
+    option dontlognull
+    timeout connect 5000
+    timeout client 50000
+    timeout server 50000
 
-frontend th3gr00t-tech-frontend
-    bind *:8080
-    default_backend th3gr00t-tech-backend
+frontend http_front
+    bind *:80
+    stats uri /haproxy?stats
 
-backend th3gr00t-tech-backend
+    default_backend http_back
+
+backend http_back
     balance roundrobin
-    server 453-web-01 54.82.82.3:8080 check
-    server 453-web-02 18.209.178.150:8080 check
-"
+    server 414795-web-01 54.82.82.3:80 check
+    server 414795-web-02 18.209.178.150:80 check
+EOF
 
 # shellcheck disable=SC2154
-echo "$server_config" | sudo dd status=none of=/etc/haproxy/haproxy.cfg
+echo "$server_config" | sudo tee -a /etc/haproxy/haproxy.cfg > /dev/null
 
 # enable haproxy to be started by init script
 echo "ENABLED=1" | sudo dd status=none of=/etc/default/haproxy
 
-# Introduce error handling for HAProxy service start/restart
-if sudo service haproxy start; then
-    echo -e "${green}HAProxy service started successfully.${reset}\n"
-else
-    echo -e "${brown}Error starting/restarting HAProxy service.${reset}\n"
-fi
+# Restart HAProxy to apply the changes
+sudo service haproxy restart
 
+# Enable HAProxy to start on boot
+sudo systemctl enable haproxy
+
+echo "HAProxy has been installed and configured successfully."
