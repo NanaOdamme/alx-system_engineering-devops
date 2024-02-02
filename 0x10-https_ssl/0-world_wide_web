@@ -2,12 +2,13 @@
 # Function to get record type and destination of a domain
 get_record() {
     local domain=$1
-    local result=$(dig +short -t A $domain)
+    local subdomain=$2
+    local result=$(dig +short -t A "$subdomain.$domain")
 
     if [[ -n $result ]]; then
-        echo "The subdomain $domain is a A record and points to $result"
+        echo "The subdomain $subdomain is a A record and points to $result"
     else
-        echo "The subdomain $domain does not seem to have an A record"
+        echo "The subdomain $subdomain does not seem to have an A record"
     fi
 }
 
@@ -21,9 +22,9 @@ domain=$1
 
 # Check if subdomain is provided
 if [[ -n $2 ]]; then
-    get_record "$2.$domain"
+    get_record "$domain" "$2"
 else
     for subdomain in www lb-01 web-01 web-02; do
-        get_record "$subdomain.$domain"
+        get_record "$domain" "$subdomain"
     done
 fi
