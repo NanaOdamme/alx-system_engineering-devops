@@ -2,10 +2,9 @@
 '''A script that gathers employee name completed
 tasks and total number of tasks from an API and exports data in CSV format
 '''
-
+import csv
 import re
 import requests
-import csv
 import sys
 
 REST_API = "https://jsonplaceholder.typicode.com"
@@ -26,8 +25,10 @@ if __name__ == '__main__':
                 fieldnames = ['USER_ID', 'USERNAME',
                               'TASK_COMPLETED_STATUS', 'TASK_TITLE']
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
                 writer.writeheader()
-                for task in tasks:
+
+                for task in completed_tasks:
                     writer.writerow({
                         'USER_ID': id,
                         'USERNAME': emp_name,
@@ -35,4 +36,4 @@ if __name__ == '__main__':
                         'TASK_TITLE': task['title']
                     })
 
-            print('Data exported to {}'.format(csv_filename))
+                print('Data exported to {}'.format(csv_filename))
