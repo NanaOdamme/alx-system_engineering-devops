@@ -22,14 +22,11 @@ if __name__ == '__main__':
             completed_tasks = list(filter(lambda x: x.get('completed'), tasks))
 
             csv_filename = '{}.csv'.format(id)
-            
             with open(csv_filename, 'w', newline='') as csvfile:
                 fieldnames = ['USER_ID', 'USERNAME',
-		'TASK_COMPLETED_STATUS', 'TASK_TITLE']
+                              'TASK_COMPLETED_STATUS', 'TASK_TITLE']
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-                
                 writer.writeheader()
-                
                 for task in tasks:
                     writer.writerow({
                         'USER_ID': id,
