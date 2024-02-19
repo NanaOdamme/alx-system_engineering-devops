@@ -16,24 +16,20 @@ if __name__ == '__main__':
             id = int(sys.argv[1])
             emp_req = requests.get('{}/users/{}'.format(REST_API, id)).json()
             task_req = requests.get('{}/todos'.format(REST_API)).json()
-            emp_name = emp_req.get('name')
+            emp_name = emp_req.get('name').split()[0]
             tasks = list(filter(lambda x: x.get('userId') == id, task_req))
             completed_tasks = list(filter(lambda x: x.get('completed'), tasks))
 
             csv_filename = '{}.csv'.format(id)
             with open(csv_filename, 'w', newline='') as csvfile:
-                fieldnames = ['USER_ID', 'USERNAME',
-                              'TASK_COMPLETED_STATUS', 'TASK_TITLE']
-                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
-                writer.writeheader()
+                writer = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
 
                 for task in completed_tasks:
-                    writer.writerow({
-                        'USER_ID': id,
-                        'USERNAME': emp_name,
-                        'TASK_COMPLETED_STATUS': str(task['completed']),
-                        'TASK_TITLE': task['title']
-                    })
+                    writer.writerow([
+                        str(id),
+                        emp_name,
+                        str(task['completed']),
+                        task['title']
+                    ])
 
                 print('Data exported to {}'.format(csv_filename))
