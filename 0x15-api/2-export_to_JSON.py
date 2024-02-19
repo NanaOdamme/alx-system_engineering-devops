@@ -11,6 +11,7 @@ import sys
 
 REST_API = "https://jsonplaceholder.typicode.com"
 
+
 def fetch_employee_data(employee_id):
     """
     Fetch employee data from the API.
@@ -31,6 +32,7 @@ def fetch_employee_data(employee_id):
         print(f"Error: Unable to fetch employee data from API - {e}")
         sys.exit(1)
 
+
 def fetch_tasks_data():
     """
     Fetch tasks data from the API.
@@ -47,6 +49,7 @@ def fetch_tasks_data():
     except requests.exceptions.RequestException as e:
         print(f"Error: Unable to fetch tasks data from API - {e}")
         sys.exit(1)
+
 
 def export_to_json(employee_id, employee_name, tasks):
     """
@@ -74,6 +77,7 @@ def export_to_json(employee_id, employee_name, tasks):
 
     print(f"Data exported to {json_filename}")
 
+
 if __name__ == '__main__':
     if len(sys.argv) != 2 or not re.fullmatch(r'\d+', sys.argv[1]):
         print("Usage: ./script.py <employee_id>")
@@ -86,8 +90,6 @@ if __name__ == '__main__':
 
     emp_name = emp_data.get('name')
     tasks = [task for task in tasks_data if task.get('userId') == employee_id]
-
-    print(f"Employee {emp_name} is done with tasks({len(tasks)}/{len(tasks_data)}):")
 
     if tasks:
         for task in tasks:

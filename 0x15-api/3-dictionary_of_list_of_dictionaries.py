@@ -10,6 +10,7 @@ import sys
 
 REST_API = "https://jsonplaceholder.typicode.com"
 
+
 def fetch_all_employees_data():
     """
     Fetch data for all employees from the API.
@@ -28,6 +29,7 @@ def fetch_all_employees_data():
         print(f"Error: Unable to fetch data for all employees from API - {e}")
         sys.exit(1)
 
+
 def fetch_tasks_data():
     """
     Fetch tasks data from the API.
@@ -44,6 +46,7 @@ def fetch_tasks_data():
     except requests.exceptions.RequestException as e:
         print(f"Error: Unable to fetch tasks data from API - {e}")
         sys.exit(1)
+
 
 def export_to_json(employees_data, tasks):
     """
@@ -73,6 +76,7 @@ def export_to_json(employees_data, tasks):
         json.dump(json_data, json_file, indent=2)
 
     print(f"Data exported to {json_filename}")
+
 
 if __name__ == '__main__':
     employees_data = fetch_all_employees_data()
