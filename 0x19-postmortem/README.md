@@ -24,8 +24,9 @@
 
 ## Corrective and Preventative Measures:
 - **Improvements/Fixes:**
-  - Install a loud alarm clock for Apache 2, so it doesn't oversleep.
-  - Implement regular health check-ups for both Nginx and Apache 2 to catch any signs of fatigue early.
+  - Implement robust monitoring for Apache 2 service health..
+  - Establish automated alerts for Apache 2 service failures.
+  - Document and maintain clear procedures for handling web server failures.
   - Keep a stash of caffeine handy for emergency situations (just kidding... or maybe not).
 - **Tasks:**
   - Patch Apache 2 server to the latest version and ensure it gets its beauty sleep regularly.
