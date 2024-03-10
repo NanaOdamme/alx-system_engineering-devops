@@ -2,7 +2,8 @@
 
 # Web Stack Outage Postmortem: When Nginx Took a Nap
 
-![Nginx Sleeping](https://imgur.com/gallery/AUNQsKn)
+![Nginx Sleeping]
+![ad3fc218-708c-4435-af14-1261b31f3c00](https://github.com/NanaOdamme/alx-system_engineering-devops/assets/133671534/92debd93-6604-4f9e-9bcb-5f866805b880)
 
 ## Issue Summary:
 - **Duration:** Jan 29, 2023, 8:00am - 9:30am
